@@ -41,6 +41,13 @@ public class TaskController {
 
     @PutMapping("/tasks/{taskId}")
     public ResponseEntity<Task> updateTask(@PathVariable int taskId, @RequestBody Task task){
+        Task existingTask = service.getTaskById(taskId);
+        if (existingTask == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Ensure the ID in the path matches the task being updated
+        task.setId(taskId);
         return ResponseEntity.ok(service.updateTask(task));
     }
 
